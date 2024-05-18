@@ -1,15 +1,14 @@
 {
-  "originHash" : "e73666e4fe3380e32ff24022841634f3380ce2ab3e1878f7f46ce1980dfe7ffb",
   "pins" : [
     {
       "identity" : "urlqueryitemcoder",
       "kind" : "remoteSourceControl",
-      "location" : "git@github.com:kylehughes/URLQueryItemCoder.git",
+      "location" : "https://github.com/kylehughes/URLQueryItemCoder.git",
       "state" : {
         "revision" : "a828b3bb5b273adf85a3ca95d9705987cb2de7c7",
         "version" : "1.0.0"
       }
     }
   ],
-  "version" : 3
+  "version" : 2
 }

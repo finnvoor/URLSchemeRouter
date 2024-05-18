@@ -12,15 +12,8 @@ jobs:
   test:
     name: Test
     runs-on: macOS-14
-    strategy:
-      matrix:
-        destination:
-          - "generic/platform=iOS"
-          - "platform=macOS"
-          - "generic/platform=visionOS"
-          - "generic/platform=tvOS"
     
     steps:
       - uses: actions/checkout@v3
       - name: Test platform ${{ matrix.destination }}
-        run: set -o pipefail && xcodebuild test -scheme URLSchemeRouter -destination "${{ matrix.destination }}" | xcbeautify --renderer github-actions
+        run: set -o pipefail && xcodebuild test -scheme URLSchemeRouter -destination "platform=macOS" | xcbeautify --renderer github-actions

@@ -11,6 +11,11 @@ import Cocoa
 public class URLSchemeRouter {
     // MARK: Lifecycle
 
+    /// Creates a URLSchemeRouter
+    /// - Parameters:
+    ///   - scheme: The scheme to match. This should also be declared in your app's `Info.plist` file.
+    ///   - errorHandler: An optional error handler to call when x-error isn't specified for a URL and an error occurs.
+    ///   - queryItemDecodingStrategies: The strategies for decoding `Decodable` values from the URL query items.
     public init(
         scheme: String,
         onError errorHandler: ((Error) -> Void)? = nil,
@@ -30,8 +35,13 @@ public class URLSchemeRouter {
 
     // MARK: Public
 
+    /// The scheme that the router matches.
     public let scheme: String
 
+    /// Adds a route handler.
+    /// - Parameters:
+    ///   - path: The path to match.
+    ///   - handler: A handler to call when a URL path matches the specified path.
     public func route<Input: Decodable>(_ path: String, _ handler: @escaping (Input) throws -> (some Encodable)) {
         routes.append(Route(
             path: path,
@@ -40,6 +50,10 @@ public class URLSchemeRouter {
         ))
     }
 
+    /// Adds a route handler.
+    /// - Parameters:
+    ///   - path: The path to match.
+    ///   - handler: A handler to call when a URL path matches the specified path.
     public func route<Input: Decodable>(_ path: String, _ handler: @escaping (Input) throws -> Void) {
         routes.append(Route(
             path: path,
@@ -48,6 +62,10 @@ public class URLSchemeRouter {
         ))
     }
 
+    /// Adds a route handler.
+    /// - Parameters:
+    ///   - path: The path to match.
+    ///   - handler: A handler to call when a URL path matches the specified path.
     public func route(_ path: String, _ handler: @escaping () throws -> (some Encodable)) {
         routes.append(Route(
             path: path,
@@ -64,6 +82,9 @@ public class URLSchemeRouter {
         ))
     }
 
+    /// Routes a URL.
+    /// - Parameter url: The URL to route.
+    /// - Returns: Whether or not the url was handled. URLs with a scheme that does not match the router's scheme will not be handled.
     @discardableResult public func handle(_ url: URL) -> Bool {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
               components.scheme == scheme else {
@@ -131,15 +152,15 @@ public class URLSchemeRouter {
 
     // MARK: Internal
 
-    struct Route {
+    var openURL: (URL) -> Void
+
+    // MARK: Private
+
+    private struct Route {
         let path: String
         let inputType: Decodable.Type?
         let handler: (Any) throws -> (Any)
     }
-
-    var openURL: (URL) -> Void
-
-    // MARK: Private
 
     private let errorHandler: ((Error) -> Void)?
     private let decoder: URLQueryItemDecoder

@@ -10,7 +10,7 @@ struct Note: Decodable {
 
 let router = URLSchemeRouter(scheme: "notesapp")
 
-router.route("create") { (note: Note) in
+router.route("/create") { (note: Note) in
     // database.saveNote(
     //     title: note.title,
     //     body: note.body

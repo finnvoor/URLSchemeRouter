@@ -18,7 +18,7 @@ router.route("create") { (note: Note) in
 }
 
 // In `scene(_:openURLContexts:)` / `onOpenURL`
-router.handle(url) // "notesApp://callback/create?title=Title&body=My%20content"
+router.handle(url) // "notesapp://callback/create?title=Title&body=My%20content"
 ```
 
 `URLSchemeRouter` also supports [x-callback-url](https://x-callback-url.com/) out of the box, so `x-error` is called if you throw an error in the route handler or input decoding fails, and `x-success` is called on success. You can also return an `Encodable` type in a route handler to pass the output to `x-success`.  

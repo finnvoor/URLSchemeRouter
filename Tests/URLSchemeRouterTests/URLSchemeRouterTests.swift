@@ -98,7 +98,7 @@ final class URLSchemeRouterTests: XCTestCase {
 
         let expectation = expectation(description: "x-error called")
         router.openURL = {
-            XCTAssertEqual($0.absoluteString, "failure://failure?errorCode=0&errorMessage=The%20data%20couldn%E2%80%99t%20be%20read%20because%20it%20isn%E2%80%99t%20in%20the%20correct%20format.")
+            XCTAssertEqual($0.absoluteString, "failure://failure?errorCode=0&errorMessage=Value%20for%20parameter%20%22number%22%20has%20incorrect%20type.")
             expectation.fulfill()
         }
         router.handle(URL(string: "test:///test?number=invalid&x-error=failure%3A%2F%2Ffailure")!)

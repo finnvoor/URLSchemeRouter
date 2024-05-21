@@ -128,10 +128,17 @@ public class URLSchemeRouter {
         for route in routes {
             if components.path == route.path {
                 do {
-                    let input: Any = if let inputType = route.inputType {
-                        try decoder.decode(inputType, from: queryItems)
+                    let input: Any
+                    if let inputType = route.inputType {
+                        do {
+                            input = try decoder.decode(inputType, from: queryItems)
+                        } catch let error as Swift.DecodingError {
+                            throw DecodingError(decodingError: error)
+                        } catch {
+                            throw error
+                        }
                     } else {
-                        ()
+                        input = ()
                     }
                     let output = try route.handler(input)
                     if let output = output as? Encodable {
@@ -166,4 +173,24 @@ public class URLSchemeRouter {
     private let decoder: URLQueryItemDecoder
 
     private var routes: [Route] = []
+}
+
+// MARK: URLSchemeRouter.DecodingError
+
+public extension URLSchemeRouter {
+    struct DecodingError: Error, LocalizedError {
+        public let decodingError: Swift.DecodingError
+
+        public var errorDescription: String? {
+            switch decodingError {
+            case let Swift.DecodingError.valueNotFound(_, context):
+                "Required value for parameter \"\(context.codingPath.map(\.stringValue).joined(separator: "."))\" not found."
+            case let Swift.DecodingError.keyNotFound(key, _):
+                "Required parameter \"\(key.stringValue)\" not found."
+            case let Swift.DecodingError.typeMismatch(_, context):
+                "Value for parameter \"\(context.codingPath.map(\.stringValue).joined(separator: "."))\" has incorrect type."
+            default: decodingError.localizedDescription
+            }
+        }
+    }
 }
